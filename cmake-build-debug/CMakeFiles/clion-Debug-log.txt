@@ -1,0 +1,5 @@
+C:\msys64\mingw64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "MinGW Makefiles" -S C:\Users\User\CLionProjects\ApplicationQT -B C:\Users\User\CLionProjects\ApplicationQT\cmake-build-debug
+-- Using Qt from: C:/Users/User/CLionProjects/ApplicationQT/ThirdParty/Qt/Qt-6.7.0
+-- Configuring done (0.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: C:/Users/User/CLionProjects/ApplicationQT/cmake-build-debug
