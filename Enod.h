@@ -1,5 +1,6 @@
 #ifndef ENOD_H
 #define ENOD_H
+
 #include "ComPort.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,8 +8,13 @@
 #include <stdint.h>
 #include <array>
 #include <string>
-#include <QObject>  // Добавляем
+#include <QObject>
 #include <sstream>
+
+#ifdef _WIN32
+#include <windows.h>
+    #define usleep(x) Sleep((x)/1000)
+#endif
 
 typedef struct {
     const char* type_str;
@@ -21,8 +27,8 @@ typedef struct {
     uint8_t raw_packet[26];
 } DeviceData;
 
-class Enod : public QObject, public ComPortBase {  // Наследуем от QObject
-Q_OBJECT  // Добавляем макрос для сигналов
+class Enod : public QObject, public ComPortBase {
+Q_OBJECT
 
 public:
     Enod(QObject* parent = nullptr);
@@ -44,8 +50,9 @@ public:
     // Делаем эти переменные публичными для доступа из MainWindow
     int packet_idx = 0;
     int packet_num = 0;
+
 signals:
-    void newDataAvailable(const QString& data);  // Добавляем сигнал
+    void newDataAvailable(const QString& data);
 
 private:
     char buffer[200];
@@ -61,6 +68,10 @@ private:
     uint8_t voltage_raw;
     uint8_t fw_unsigned;
     int8_t fw_signed;
+
+#ifdef _WIN32
+    DWORD bytes_read_win;
+#endif
 };
 
 #endif

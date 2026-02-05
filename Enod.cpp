@@ -5,6 +5,10 @@
 #include <iostream>
 #include <iomanip>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 Enod::Enod(QObject* parent) : QObject(parent) {
 }
 
@@ -47,7 +51,6 @@ void Enod::parce_packet() {
 }
 
 std::string Enod::get_data_string() {
-
     snprintf(buffer, sizeof(buffer),
              "[%2d] %-7s | ID: 0x%08X | "
              "Вер: %2d | "
@@ -77,11 +80,46 @@ void Enod::read_port() {
     _port = search_port();
 
     if (_port < 0) {
+        emit newDataAvailable(QString("Ошибка: Не удалось найти рабочий порт"));
         return;
     }
 
     stop_flag = false;
 
+#ifdef _WIN32
+    HANDLE hPort = (HANDLE)_port;
+
+    while (!stop_flag) {
+        if (ReadFile(hPort, &byte, 1, &bytes_read_win, NULL)) {
+            bytes_read = bytes_read_win;
+
+            if (bytes_read > 0) {
+                packet[packet_idx++] = byte;
+
+                if (packet_idx == 26) {
+                    std::memcpy(packet_data.data(), packet, 26);
+                    parce_packet();
+
+                    // Получаем строку данных
+                    data_str = get_data_string();
+
+                    // Испускаем сигнал с данными
+                    emit newDataAvailable(QString::fromStdString(data_str));
+
+                    // Сбрасываем индекс
+                    packet_idx = 0;
+                }
+            }
+        } else {
+            DWORD error = GetLastError();
+            if (error != ERROR_IO_PENDING) {
+                break;
+            }
+        }
+
+        usleep(1000);
+    }
+#else
     while (!stop_flag) {
         bytes_read = read(_port, &byte, 1);
 
@@ -108,9 +146,10 @@ void Enod::read_port() {
 
         usleep(1000);
     }
+#endif
 
     if (_port >= 0) {
-        close(_port);
+        close_port();
     }
 
     stop_flag = false;

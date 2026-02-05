@@ -371,25 +371,46 @@ void MainWindow::connectToPort()
     QString speedText = speedComboBox->currentText();
 
     // Устанавливаем порт
-    enod->port = selectedPort.toUtf8().constData();
+    enod->set_port(selectedPort.toUtf8().constData());
 
+    // Устанавливаем скорость
+#ifdef _WIN32
     if (speedText == "1200") {
-        enod->speed_m = B1200;
+        enod->set_speed_win(CBR_1200);
     } else if (speedText == "2400") {
-        enod->speed_m = B2400;
+        enod->set_speed_win(CBR_2400);
     } else if (speedText == "4800") {
-        enod->speed_m = B4800;
+        enod->set_speed_win(CBR_4800);
     } else if (speedText == "9600") {
-        enod->speed_m = B9600;
+        enod->set_speed_win(CBR_9600);
     } else if (speedText == "19200") {
-        enod->speed_m = B19200;
+        enod->set_speed_win(CBR_19200);
     } else if (speedText == "38400") {
-        enod->speed_m = B38400;
+        enod->set_speed_win(CBR_38400);
     } else if (speedText == "57600") {
-        enod->speed_m = B57600;
+        enod->set_speed_win(CBR_57600);
     } else if (speedText == "115200") {
-        enod->speed_m = B115200;
+        enod->set_speed_win(CBR_115200);
     }
+#else
+    if (speedText == "1200") {
+        enod->set_speed(B1200);
+    } else if (speedText == "2400") {
+        enod->set_speed(B2400);
+    } else if (speedText == "4800") {
+        enod->set_speed(B4800);
+    } else if (speedText == "9600") {
+        enod->set_speed(B9600);
+    } else if (speedText == "19200") {
+        enod->set_speed(B19200);
+    } else if (speedText == "38400") {
+        enod->set_speed(B38400);
+    } else if (speedText == "57600") {
+        enod->set_speed(B57600);
+    } else if (speedText == "115200") {
+        enod->set_speed(B115200);
+    }
+#endif
 
     isConnected = true;
     connectButton->setEnabled(false);
