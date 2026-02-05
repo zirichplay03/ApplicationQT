@@ -16,10 +16,13 @@
 
 class ComPortBase {
 public:
+    ComPortBase() : port(nullptr) {}
+
     int setup_serial_port();
     int search_port();
     const char* port;
-    unsigned int speed_t;
+    speed_t speed_m;
+
 private:
     std::string name;
     DIR* dir;

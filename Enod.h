@@ -29,24 +29,32 @@ public:
     void parce_packet();
     std::string get_data_string();
     void read_port();
-    void stop() { stop_flag = true; }
+    void stop() {
+        stop_flag = true;
+    }
+    void reset() {
+        stop_flag = false;
+        packet_idx = 0;
+        packet_num = 0;
+    }
 
     DeviceData device_data_;
     volatile bool stop_flag = false;
 
+    // Делаем эти переменные публичными для доступа из MainWindow
+    int packet_idx = 0;
+    int packet_num = 0;
 signals:
     void newDataAvailable(const QString& data);  // Добавляем сигнал
 
 private:
-    std::stringstream ss;
+    char buffer[200];
     std::string data_str;
     std::array<uint8_t, 26> packet_data;
-    int packet_num = 0;
     int _port;
     uint8_t byte = 0;
     uint8_t packet[26];
     const uint8_t* packet_;
-    int packet_idx = 0;
     int bytes_read;
     uint16_t pressure;
     int8_t temp_raw;

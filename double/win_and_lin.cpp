@@ -136,8 +136,8 @@ int setup_serial_port(const char* port) {
     }
 
     // Настройка скорости
-    cfsetospeed(&tty, B115200);
-    cfsetispeed(&tty, B115200);
+    cfsetospeed(&tty, B1200);
+    cfsetispeed(&tty, B1200);
 
     // Настройка битов управления
     tty.c_cflag &= ~PARENB;

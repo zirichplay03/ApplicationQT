@@ -22,8 +22,8 @@ int ComPortBase::setup_serial_port() {
         return -1;
     }
 
-    cfsetospeed(&tty, speed_t);
-    cfsetispeed(&tty, speed_t);
+    cfsetospeed(&tty, speed_m);
+    cfsetispeed(&tty, speed_m);
     tty.c_cflag &= ~PARENB;
     tty.c_cflag &= ~CSTOPB;
     tty.c_cflag &= ~CSIZE;

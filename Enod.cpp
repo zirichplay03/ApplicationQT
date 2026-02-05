@@ -46,29 +46,31 @@ void Enod::parce_packet() {
     device_data_.rssi = -(int8_t)packet_[24];
 }
 
-// Метод для получения строки данных (для QT)
 std::string Enod::get_data_string() {
 
-    ss << "[" << packet_num << "] " << device_data_.type_str
-       << " | ID: 0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << device_data_.id
-       << std::dec << " | ";
-
-    ss << "Версия: " << device_data_.fw_version << " | ";
-    ss << "Давление: " << std::fixed << std::setprecision(3)
-       << device_data_.pressure_bar << " бар | ";
-    ss << "Температура: " << device_data_.temperature_c << "°C | ";
-    ss << "Напряжение: " << std::fixed << std::setprecision(3)
-       << device_data_.voltage_v << "В | ";
-    ss << "RSSI: " << device_data_.rssi << " | ";
-
-    ss << "ID байты: 0x" << std::hex << std::setw(2) << std::setfill('0')
-       << (int)device_data_.raw_packet[3] << " 0x"
-       << std::setw(2) << (int)device_data_.raw_packet[4] << " 0x"
-       << std::setw(2) << (int)device_data_.raw_packet[5] << " 0x"
-       << std::setw(2) << (int)device_data_.raw_packet[6];
+    snprintf(buffer, sizeof(buffer),
+             "[%2d] %-7s | ID: 0x%08X | "
+             "Вер: %2d | "
+             "Д: %6.3f бар | "
+             "Т: %2d°C | "
+             "Н: %5.3fВ | "
+             "RSSI: %3d | "
+             "Байты: 0x%02X%02X%02X%02X",
+             packet_num,
+             device_data_.type_str,
+             device_data_.id,
+             device_data_.fw_version,
+             device_data_.pressure_bar,
+             device_data_.temperature_c,
+             device_data_.voltage_v,
+             device_data_.rssi,
+             device_data_.raw_packet[3],
+             device_data_.raw_packet[4],
+             device_data_.raw_packet[5],
+             device_data_.raw_packet[6]);
 
     packet_num++;
-    return ss.str();
+    return std::string(buffer);
 }
 
 void Enod::read_port() {
