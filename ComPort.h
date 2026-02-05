@@ -65,7 +65,7 @@ public:
 
     const char* port;
 private:
-    speed_t speed_m;
+    int speed_m;
 
 #ifdef _WIN32
     DWORD baud_rate;
