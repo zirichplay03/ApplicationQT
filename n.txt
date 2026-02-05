@@ -1,0 +1,19 @@
+# В терминале MSYS2 MINGW64 (или UCRT64)
+
+# Обновление
+pacman -Syu
+
+# Установка Qt6 (основные библиотеки)
+pacman -S --needed mingw-w64-x86_64-qt6-base
+
+# Дополнительные компоненты (по необходимости)
+pacman -S mingw-w64-x86_64-qt6-declarative  # QML
+pacman -S mingw-w64-x86_64-qt6-tools         # Инструменты (moc, uic, rcc)
+pacman -S mingw-w64-x86_64-qt6-multimedia    # Мультимедиа
+pacman -S mingw-w64-x86_64-qt6-svg           # SVG
+
+# Для 64-bit Windows (рекомендуется)
+pacman -S --needed mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-make
+
+# ИЛИ для MinGW64 (альтернатива)
+pacman -S --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-make
